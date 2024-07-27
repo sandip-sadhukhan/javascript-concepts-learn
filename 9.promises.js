@@ -44,7 +44,7 @@ function likeTheVideo(video) {
 function shareTheVideo(video) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            reject(`Share the ${video} video`);
+            resolve(`Share the ${video} video`);
         }, 500)
     })
 }
@@ -258,3 +258,99 @@ reason -> then always run after sync code.
 // ])
 
 
+// Promise Polyfill
+// function PromisePolyFill(executer) {
+//     let onResolve, onReject, isFullFilled=false, isCalled=false, value,
+//     isRejected=false;
+
+//     function resolve(val) {
+//         isFullFilled = true;
+//         value = val;
+
+//         if (typeof onResolve === 'function') {
+//             onResolve(val);
+//             isCalled = true;
+//         }
+//     }
+    
+//     function reject(val) {
+//         isRejected = true;
+//         value = val
+
+//         if (typeof onReject === 'function') {
+//             onReject(val);
+//             isCalled = true;
+//         }
+//     }
+
+//     this.then = function(callback) {
+//         onResolve = callback;
+
+//         if (isFullFilled && !isCalled) {
+//             isCalled = true;
+//             onResolve(value);
+//         }
+
+//         return this;
+//     }
+
+//     this.catch = function(callback) {
+//         onReject = callback;
+
+//         if (isRejected && !isCalled) {
+//             isCalled = true;
+//             onReject(value);
+//         }
+
+//         return this;
+//     }
+
+//     try {
+//         executer(resolve, reject)
+//     } catch(error) {
+//         reject(error);
+//     }
+// }
+
+// const examplePromise = new PromisePolyFill((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve(2)
+//     }, 1000)
+// })
+
+// examplePromise.then(res => console.log(res)).catch(err => console.log(err))
+
+
+// Promise.all() Polyfill implementation
+Promise.allPolyfill = (promises) => {
+    return new Promise((resolve, reject) => {
+        const results = [];
+
+        if (!promises.length) {
+            resolve(results);
+            return;
+        }
+
+        let pending = promises.length;
+
+        promises.forEach((promise, idx) => {
+            Promise.resolve(promise).then((res) => {
+                results[idx] = res;
+                pending --;
+
+                if (pending === 0) {
+                    resolve(results)
+                }
+            }, reject)
+        })
+        
+    })
+}
+
+Promise.allPolyfill([
+    importantAction("Sandip Sadhukhan"),
+    likeTheVideo("Django video"),
+    shareTheVideo("React video")
+]).then(function(res) {
+    console.log(res)
+})
