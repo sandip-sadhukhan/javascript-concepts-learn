@@ -24,30 +24,30 @@
 
 
 // async/await
-// function importantAction(username) {
-//     return new Promise((resolve, reject) => {
-//         setTimeout(() => {
-//             resolve(`Subscribe to ${username}`)
-//         }, 1000)
-//     })
-// }
+function importantAction(username) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(`Subscribe to ${username}`)
+        }, 1000)
+    })
+}
 
 
-// function likeTheVideo(video) {
-//     return new Promise((resolve, reject) => {
-//         setTimeout(() => {
-//             resolve(`Like the ${video} video`);
-//         }, 100)
-//     })
-// }
+function likeTheVideo(video) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(`Like the ${video} video`);
+        }, 100)
+    })
+}
 
-// function shareTheVideo(video) {
-//     return new Promise((resolve, reject) => {
-//         setTimeout(() => {
-//             reject(`Share the ${video} video`);
-//         }, 500)
-//     })
-// }
+function shareTheVideo(video) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            reject(`Share the ${video} video`);
+        }, 500)
+    })
+}
 
 // const result = async () => {
 //     try {
@@ -164,3 +164,97 @@ success
 
 reason -> then always run after sync code.
 */
+
+
+// What is the output?
+// function job() {
+//     return new Promise(function (resolve, reject) {
+//         reject();
+//     })
+// }
+
+// let promise = job();
+
+// promise
+//     .then(function() {
+//         console.log("Success 1");
+//     })
+//     .then(function() {
+//         console.log("Success 2");
+//     })
+//     .then(function() {
+//         console.log("Success 3");
+//     })
+//     .catch(function() {
+//         console.log("Error 1");
+//     })
+//     .then(function() {
+//         console.log("Success 4");
+//     })
+
+
+// Output
+// Error 1
+// Success 4
+// Reason -> after error it will resolve so success 4 will print
+
+// .catch(error) {
+//     console.log("something")
+//     return "Hello"
+// }
+// .then(function(data) {
+//     console.log(data)
+// }
+
+// This will print
+// something
+// then Hello as return "Hello" means promise resolved so it will go to then block
+
+// .catch(error) {
+//     console.log("something")
+//     return new Error("test")
+// }
+// .then(function(data) {
+//     console.log(data)
+// }
+// This also call then after error as return new Error('test') is not rejecting
+// instead it is returning a value if we do throw Error then it will reject
+
+
+// Promise chaining 
+// const firstPromise = new Promise((resolve, reject) => {
+//     resolve("First!");
+// })
+
+// const secondPromise = new Promise((resolve, reject) => {
+//     resolve(firstPromise);
+// })
+
+// secondPromise.then((res) => {
+//     return res;
+// }).then(res => {
+//     console.log(res); // First!
+//     return res;
+// })
+
+
+// Solve Promise Recursively
+// function promRecurse(funcPromises) {
+//     if (funcPromises.length === 0) return;
+
+//     const currentPromise = funcPromises.shift();
+
+//     currentPromise.then(function(res) {
+//         console.log(res)
+//     }).catch((err) => console.log(err))
+
+//     promRecurse(funcPromises);
+// }
+
+// promRecurse([
+//     importantAction("Sandip Sadhukhan"),
+//     likeTheVideo("Django video"),
+//     shareTheVideo("React video")
+// ])
+
+
